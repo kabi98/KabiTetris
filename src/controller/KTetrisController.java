@@ -86,19 +86,20 @@ public class KTetrisController implements Runnable, KeyListener {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
 			LOG.info(" VK_UP ");
-			currBlock.rotateBlock(board);
+//			currBlock.rotateBlock(board);
+			currBlock.upBlock(board);
 			break;
 		case KeyEvent.VK_LEFT:
 			LOG.info(" VK_LEFT ");
-//			currBlock.leftBlock(board);
+			currBlock.leftBlock(board);
 			break;
 		case KeyEvent.VK_RIGHT:
 			LOG.info(" VK_RIGHT ");
-//			currBlock.rightBlock(board);
+			currBlock.rightBlock(board);
 			break;
 		case KeyEvent.VK_DOWN:
 			LOG.info(" VK_DOWN ");
-//			currBlock.downBlock(board);
+			currBlock.downBlock(board);
 			break;
 		case KeyEvent.VK_SPACE: 
 			LOG.info(" VK_SPACE ");

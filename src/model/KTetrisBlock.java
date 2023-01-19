@@ -6,20 +6,15 @@ import java.util.logging.Logger;
 
 import controller.KTetrisController;
 
-
 public class KTetrisBlock {
 	public final int BLOCK_TYPE = 7;
 	public final int BLOCK_ROW = 4;
 	public final int BLOCK_COL = 4;
 	
-	// rainbow 7 colors : red, orange, yellow, green, blue, indigo, purple
-	public static final Color[] COLORS = { Color.RED, Color.ORANGE,
-			Color.YELLOW, Color.GREEN, Color.BLUE, Color.decode("#4B0082"),
-			Color.decode("#800080") };
+	public int[][] block;
+	public int type;
 	
-	public int[][] block = new int[BLOCK_ROW][BLOCK_COL];
 	public int posX = 0, posY = 0;
-	public Color color; // color.
 	private KTetrisController controller;
 	
 	private final static Logger LOG = Logger.getGlobal();
@@ -29,7 +24,6 @@ public class KTetrisBlock {
 		
 		this.controller = controller;
 		Random rand = new Random();
-		this.color = COLORS[rand.nextInt(COLORS.length)];
 		setBlock(rand.nextInt(BLOCK_TYPE));
 		
 		LOG.info("**** Finish *****");
@@ -38,43 +32,44 @@ public class KTetrisBlock {
 	
 	private void setBlock(int type) {
 		LOG.info("**** Start *****");
+		this.type = type;
 		
-		if (type == 0) {
-			block[0] = new int[] { 0, 1, 0, 0 };
-			block[1] = new int[] { 0, 1, 0, 0 };
-			block[2] = new int[] { 0, 1, 0, 0 };
-			block[3] = new int[] { 0, 1, 0, 0 };
-		} else if (type == 1) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 0, 1, 0, 0 };
-			block[2] = new int[] { 0, 1, 1, 1 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		} else if (type == 2) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 1, 1, 1, 0 };
-			block[2] = new int[] { 0, 0, 1, 0 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		} else if (type == 3) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 0, 1, 1, 0 };
-			block[2] = new int[] { 0, 1, 1, 0 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		} else if (type == 4) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 0, 1, 0, 0 };
-			block[2] = new int[] { 1, 1, 1, 0 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		} else if (type == 5) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 0, 1, 1, 0 };
-			block[2] = new int[] { 1, 1, 0, 0 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		} else if (type >= 6) {
-			block[0] = new int[] { 0, 0, 0, 0 };
-			block[1] = new int[] { 1, 1, 0, 0 };
-			block[2] = new int[] { 0, 1, 1, 0 };
-			block[3] = new int[] { 0, 0, 0, 0 };
-		}
+		if(type == 0) {
+			block = new int[][]	{
+				{1, 1, 1, 1}
+				};
+		} else if(type == 1) {
+			block = new int[][]	{
+				{1, 1, 1},
+				{0, 1, 0}
+				};
+		} else if(type == 2) {
+			block = new int[][]	{
+				{1, 1, 1},
+				{0, 0, 1}
+				};
+		} else if(type == 3) {
+			block = new int[][]	{
+				{1, 1, 1},
+				{1, 0, 0}
+				};
+		} else if(type == 4) {
+			block = new int[][]	{
+				{0, 1, 1},
+				{1, 1, 0}
+				};
+		} else if(type == 5) {
+			block = new int[][]	{
+				{0, 1, 1},
+				{1, 1, 0}
+				};
+		} else if(type == 6) {
+			block = new int[][]	{
+				{1, 1},
+				{1, 1}
+				};
+		} ;
+
 		
 		LOG.info("**** Finish *****");
 		
@@ -83,23 +78,22 @@ public class KTetrisBlock {
 	public void nextBlock(KTetrisBoard board) {
 		LOG.info("**** Start *****");
 		Random rand = new Random();
-		this.color = COLORS[rand.nextInt(COLORS.length)];
 		setBlock(rand.nextInt(BLOCK_TYPE));
 		
 		LOG.info("**** Finish *****");
 		return ;
 	}	
 	
-	private static int[][] rotate(int[][] m) {
+	private static int[][] rotate(int[][] orgMap) {
 		LOG.info("**** Start *****");
-		int N = m.length;
-		int M = m[0].length;
+		int iRow = orgMap.length;
+		int iCol = orgMap[0].length;
 		// 돌린 크기만큼으로 생성해준다.
-		int[][] copyMap = new int[M][N];
+		int[][] copyMap = new int[iCol][iRow];
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				copyMap[j][N - 1 - i] = m[i][j];
+		for (int i = 0; i < iRow; i++) {
+			for (int j = 0; j < iCol; j++) {
+				copyMap[j][iRow - 1 - i] = orgMap[i][j];
 			}
 		}
 
@@ -114,15 +108,7 @@ public class KTetrisBlock {
 		LOG.info("**** Start *****");
 		
 		int[][] currentBlock = block.clone();
-		int[][] nextBlock = new int[4][4];
-
-//		// 회전 시킨다.
-//		for (int i = 0; i < block.length; i++)
-//			for (int j = 0; j < block[i].length; j++)
-//				nextBlock[i][j] = 0;
-//		for (int i = 0; i < block.length; i++)
-//			for (int j = 0; j < block[i].length; j++)
-//				nextBlock[i][j] = block[j][3 - i];
+		int[][] nextBlock;
 		
 		nextBlock = rotate(currentBlock);
 
@@ -151,6 +137,39 @@ public class KTetrisBlock {
 //		trim();
 		LOG.info("**** Finish *****");
 	}
+	
+	public void leftBlock(KTetrisBoard board) {
+		if(posX > 0)
+			posX = posX - 1;
+//		if (posX + getLeftBorder() > 0) { // 좌측벽 충돌 검사.
+//			if (isAbleToMoveAfterCrachCheck(board, -1, 0))
+//		}
+	}
+
+	public void rightBlock(KTetrisBoard board) {
+		if(posX + block.length < board.COL_SIZE)
+			posX = posX+1;
+//		if (posX + getRightBorder() < TetrisBoard.x) { // 우측벽 충돌검사.
+//			if (isAbleToMoveAfterCrachCheck(board, 1, 0))
+//		}
+	}
+	
+	public void upBlock(KTetrisBoard board) {
+		if(posY > 0)
+			posY = posY - 1;
+//		if (posX + getLeftBorder() > 0) { // 좌측벽 충돌 검사.
+//			if (isAbleToMoveAfterCrachCheck(board, -1, 0))
+//		}
+	}
+
+	public void downBlock(KTetrisBoard board) {
+		if(posY + block[0].length < board.ROW_SIZE )
+			posY = posY+1;
+//		if (posX + getRightBorder() < TetrisBoard.x) { // 우측벽 충돌검사.
+//			if (isAbleToMoveAfterCrachCheck(board, 1, 0))
+//		}
+	}
+	
 
 	private int getLeftBorder() {
 		LOG.info("**** Start *****");
