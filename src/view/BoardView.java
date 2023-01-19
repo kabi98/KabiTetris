@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.Clip;
@@ -14,6 +15,9 @@ import controller.KTetrisController;
 import model.KTetrisBlock;
 import model.KTetrisBoard;
 import model.ViewListener;
+
+import static tetrismain.Constants.BOARD_SAVE_PLUS;
+
 
 import static tetrismain.Constants.BLOCK_COLORS;
 
@@ -72,48 +76,55 @@ public class BoardView extends JPanel implements ViewListener {
 		g2d.setStroke(new BasicStroke(2));
 		g2d.setColor(new Color(0, 0, 0, 100));
 		
-		for (int i = 0; i <= board.ROW_SIZE; i++) {
-			g2d.drawLine(0, i * BLOCK_SIZE, board.COL_SIZE * BLOCK_SIZE, i * BLOCK_SIZE);
+		for (int i = 0; i <= board.matrix.length; i++) {
+			g2d.drawLine(0, i * BLOCK_SIZE, board.matrix[0].length * BLOCK_SIZE, i * BLOCK_SIZE);
 		}
-		for (int j = 0; j <= board.COL_SIZE; j++) {
-			g2d.drawLine(j * BLOCK_SIZE, 0, j * BLOCK_SIZE, board.ROW_SIZE * BLOCK_SIZE);
+		for (int j = 0; j <= board.matrix[0].length; j++) {
+			g2d.drawLine(j * BLOCK_SIZE, 0, j * BLOCK_SIZE, board.matrix.length * BLOCK_SIZE);
 		}
-
-		// draw front
-		KTetrisBlock lookingBlock = controller.getCurrentBlock();
-		for (int i = 0; i < lookingBlock.block.length; i++) {
-			for (int j = 0; j < lookingBlock.block[0].length; j++) {
-				if (lookingBlock.block[i][j] > 0) {
-					g.drawImage(imageBlocks.getSubimage(BLOCK_SIZE*lookingBlock.type, 0, BLOCK_SIZE, BLOCK_SIZE), 
-							width * (i + lookingBlock.posX),
-							height * (j + lookingBlock.posY), 
+		
+		// draw board
+		for (int i = 0; i < board.matrix.length; i++) {
+			for (int j = 0; j < board.matrix[0].length; j++) {
+				if(board.matrix[i][j] > 0)
+				{
+					g.drawImage(imageBlocks.getSubimage(BLOCK_SIZE* (board.matrix[i][j] - BOARD_SAVE_PLUS), 0, BLOCK_SIZE, BLOCK_SIZE), 
+							width * j,
+							height * i, 
 							null);
-					System.out.print(lookingBlock.block[i][j]);
+					
 				}
 			}
-			System.out.println();
 		}
-		System.out.println();
 
+		// draw current block
+		KTetrisBlock lookingBlock = controller.getCurrentBlock();
+		for (int i = 0; i < lookingBlock.matrix.length; i++) {
+			for (int j = 0; j < lookingBlock.matrix[0].length; j++) {
+				if (lookingBlock.matrix[i][j] > 0) {
+					g.drawImage(imageBlocks.getSubimage(BLOCK_SIZE*lookingBlock.type, 0, BLOCK_SIZE, BLOCK_SIZE), 
+							width * (j + lookingBlock.posX),
+							height * (i + lookingBlock.posY), 
+							null);
+				}
+			}
+		}
+		
+		printMatrix(board.matrix);
+		printMatrix(lookingBlock.matrix);
+		
 		LOG.info(String.format("x:%d, y:%d, row:%d, col:%d %n", lookingBlock.posX, lookingBlock.posY,
-				lookingBlock.block.length, lookingBlock.block[0].length));
-
-//		for (int i = 0; i < 4; i++) {
-//			for (int j = 0; j < 4; j++) {
-//				if (lookingBlock.block[j][i] > 0) {
-//					g.setColor(lookingBlock.color);
-//					g.fillRect(width * (i + lookingBlock.posX), height * (j + lookingBlock.posY), width, height);
-//					
-//					g.drawImage(imageBlocks.getSubimage(30, 0, 30, 30), 
-//							width * (i + lookingBlock.posX), height * (j + lookingBlock.posY), null);
-//
-//					LOG.info(String.format("x:%d, y:%d, w:%d, h:%d %n", 
-//							width * (i + lookingBlock.posX), height * (j + lookingBlock.posY), width, height));
-//				}
-//			}
-//		}
+				lookingBlock.matrix.length, lookingBlock.matrix[0].length));
+		
 		LOG.info("*** Finish ***");
 	}
+	
+	void printMatrix(int [][] matrix)
+	{
+		for (int i = 0; i < matrix.length; i++) {
+			LOG.info(Arrays.toString(matrix[i]));
+		}
+ 	}
 
 	@Override
 	public void onRePaint() {

@@ -2,34 +2,37 @@ package model;
 
 import controller.KTetrisController;
 
+import static tetrismain.Constants.BOARD_SAVE_PLUS;
+
+
 public class KTetrisBoard {
-	public int Board[][];
+	public int matrix[][];
 	private KTetrisController gameController;
 	public static final int ROW_SIZE = 20;
 	public static final int COL_SIZE = 10;
 
 	public KTetrisBoard(KTetrisController gameController) {
 		this.gameController = gameController;
-		Board = new int[ROW_SIZE][COL_SIZE];
-		for (int i = 0; i < COL_SIZE; i++)
-			for (int j = 0; j < ROW_SIZE; j++)
-				Board[j][i] = 0;
+		matrix = new int[ROW_SIZE][COL_SIZE];
+		for (int i = 0; i < ROW_SIZE; i++)
+			for (int j = 0; j < COL_SIZE; j++)
+				matrix[i][j] = 0;
 	}
 
-//	public void addBlock(TetrisBlock block) {
-//		for (int i = 0; i < block.block.length; i++) {
-//			for (int j = 0; j < block.block[i].length; j++) {
+	public void addBlock(KTetrisBlock block) {
+
+		for (int i = 0; i < block.matrix.length; i++) {
+			for (int j = 0; j < block.matrix[i].length; j++) {
 //				if (block.posY + i >= y
 //						|| block.posX + j >= x)
 //					break;
-//				if (block.block[i][j] >= 1
-//						&& this.block[block.posY + i][block.posX + j] == 0)
-//					this.block[block.posY + i][block.posX + j] = block.block[i][j];
-//			}
-//		}
+				if (block.matrix[i][j] >= 1 && this.matrix[block.posY + i][block.posX + j] == 0)
+					this.matrix[block.posY + i][block.posX + j] = block.type + BOARD_SAVE_PLUS;
+			}
+		}
 //		fullLineCheck();
-//	}
-//
+	}
+
 //	private void fullLineCheck() {
 //		for (int j = y - 1; j > 0; j--) {
 //			int lineChecker = 1;

@@ -107,6 +107,16 @@ public class KTetrisController implements Runnable, KeyListener {
 //			while (keepCurrent == currBlock)
 //				currBlock.downBlock(board);
 			break;
+		case KeyEvent.VK_R: 
+			LOG.info(" VK_R ");
+			currBlock.rotateBlock(board);
+			break;
+			
+		case KeyEvent.VK_A: 
+			LOG.info(" VK_A ");
+			createNewBlock();
+			break;
+			
 		case KeyEvent.VK_N: 
 			LOG.info(" VK_N ");
 			currBlock.nextBlock(board);
@@ -187,5 +197,17 @@ public class KTetrisController implements Runnable, KeyListener {
 	public KTetrisBoard getBoard() {
 		return board;
 	}
+	
+	public void createNewBlock() {
+//		if (currBlock.posY <= 1)
+//			gameOver();
+		board.addBlock(currBlock);
+
+		this.currBlock = new KTetrisBlock(this);
+		
+//		currBlock = waitBlockList.remove(0);
+//		waitBlockList.add(new KTetrisBlock(this));
+	}
+	
 	
 }
