@@ -7,11 +7,6 @@ public final class Constants {
 		
 	}
 	
-	// rainbow 7 colors : red, orange, yellow, green, blue, indigo, purple
-	public static final Color[] BLOCK_COLORS = { Color.RED, Color.ORANGE,
-			Color.YELLOW, Color.GREEN, Color.BLUE, Color.decode("#4B0082"),
-			Color.decode("#800080") };
-	
 	public static final int BOARD_SAVE_PLUS = 10;
 }
 

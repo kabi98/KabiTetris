@@ -4,19 +4,25 @@ import controller.KTetrisController;
 
 import static tetrismain.Constants.BOARD_SAVE_PLUS;
 
+import java.util.logging.Logger;
 
 public class KTetrisBoard {
 	public int matrix[][];
 	private KTetrisController gameController;
 	public static final int ROW_SIZE = 20;
 	public static final int COL_SIZE = 10;
+	private final static Logger LOG = Logger.getGlobal();
 
 	public KTetrisBoard(KTetrisController gameController) {
+		LOG.info("**** Start *****");
+		
 		this.gameController = gameController;
 		matrix = new int[ROW_SIZE][COL_SIZE];
 		for (int i = 0; i < ROW_SIZE; i++)
 			for (int j = 0; j < COL_SIZE; j++)
 				matrix[i][j] = 0;
+
+		LOG.info("**** Finish *****");
 	}
 
 	public void addBlock(KTetrisBlock block) {
@@ -30,8 +36,39 @@ public class KTetrisBoard {
 					this.matrix[block.posY + i][block.posX + j] = block.type + BOARD_SAVE_PLUS;
 			}
 		}
+		
+		for (int i = 0; i < block.matrix.length; i++) {
+			if(isFullRow(block.posY + i)) {
+				LOG.info(String.format("Line : %d is Full %n", block.posY + i));
+				deleteRow(block.posY + i);
+			}
+		}
 //		fullLineCheck();
 	}
+
+	private boolean isFullRow(int iRowNum) {
+		LOG.info(String.format("Line : %d Check %n", iRowNum));
+
+		for (int j = 0; j < COL_SIZE; j++) {
+			if (matrix[iRowNum][j] == 0) {
+				LOG.info(String.format("Line : %d EMPTY SQUARE %n", iRowNum));
+				return false;
+			}
+		}
+		LOG.info(String.format("Line : %d FULL %n", iRowNum));
+		return true;
+
+	}
+	
+	private void deleteRow(int iRowNum) {
+		LOG.info(String.format("Line : %d deleteFullRow %n", iRowNum));
+		for (int i = iRowNum; i > 0; i--)
+			for (int j = 0; j < COL_SIZE; j++)
+				matrix[i][j] = matrix[i-1][j];
+		
+		for (int j = 0; j < COL_SIZE; j++)
+			matrix[0][j] = 0;
+	}	
 
 //	private void fullLineCheck() {
 //		for (int j = y - 1; j > 0; j--) {

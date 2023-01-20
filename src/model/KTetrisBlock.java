@@ -129,7 +129,6 @@ public class KTetrisBlock {
 			for (int j = 0; j < matrix[i].length; j++) {
 				if (matrix[i][j] > 0 && board.matrix[posY + iDeltaY + i][posX + iDeltaX + j] > 0)
 					return true;
-				;
 			}
 		}
 
@@ -166,14 +165,30 @@ public class KTetrisBlock {
 
 	}
 
-	public void downBlock(KTetrisBoard board) {
-		if (posY + matrix.length < board.matrix.length) {
-			if (isBlockCollision(board, matrix, 0, 1)) {
-				return;
-			}
+	public boolean downBlock(KTetrisBoard board) {
+
+		if ( (posY + matrix.length < board.matrix.length) 
+				&& (isBlockCollision(board, matrix, 0, 1) == false)) {
 			posY = posY + 1;
+			return true;
 		}
-		return;
+		else {
+			controller.createNewBlock();
+			return false;
+		}
+		
+//		if (posY + matrix.length < board.matrix.length) {
+//			if (isBlockCollision(board, matrix, 0, 1)) {
+//				controller.createNewBlock();
+//				return false;
+//			}
+//			else {
+//				posY = posY + 1;
+//				return true;
+//			}
+//		}
+//		controller.createNewBlock();
+//		return false;
 
 	}
 

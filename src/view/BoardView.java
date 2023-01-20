@@ -51,7 +51,7 @@ public class BoardView extends JPanel implements ViewListener {
 		imageBlocks = ImageLoader.loadImage("./textures/tiles.png");
 		imageBackground = ImageLoader.loadImage("./textures/background.png");
 		clipMmusic = ImageLoader.LoadSound("./textures/music.wav");
-//		clipMmusic.loop(Clip.LOOP_CONTINUOUSLY);
+		clipMmusic.loop(Clip.LOOP_CONTINUOUSLY);
 
 		LOG.info("*** Finish ***");
 	}
@@ -88,7 +88,9 @@ public class BoardView extends JPanel implements ViewListener {
 			for (int j = 0; j < board.matrix[0].length; j++) {
 				if(board.matrix[i][j] > 0)
 				{
-					g.drawImage(imageBlocks.getSubimage(BLOCK_SIZE* (board.matrix[i][j] - BOARD_SAVE_PLUS), 0, BLOCK_SIZE, BLOCK_SIZE), 
+					int iBlockImageX = (board.matrix[i][j] - BOARD_SAVE_PLUS) * BLOCK_SIZE;
+					g.drawImage(
+							imageBlocks.getSubimage(iBlockImageX, 0, BLOCK_SIZE, BLOCK_SIZE), 
 							width * j,
 							height * i, 
 							null);

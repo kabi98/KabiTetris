@@ -24,7 +24,6 @@ public class KTetrisController implements Runnable, KeyListener {
 	private ArrayList<ViewListener> viewListener;
 	
 	private KTetrisBoard board;
-	private List<KTetrisBlock> waitBlockList;
 	private KTetrisBlock currBlock;
 	
 
@@ -56,12 +55,12 @@ public class KTetrisController implements Runnable, KeyListener {
 		for (int moveTrigger = 0; isThreadAlive; moveTrigger++) {
 			// move
 			if (moveTrigger % speed == 0) {
-//			currBlock.downBlock(board);
+				currBlock.downBlock(board);
 				if (moveTrigger % THREAD_INTERVAL == 0)
 					speed--;
 			}
 			// paint
-//			reaquestPaint();
+			reaquestPaint();
 			try {
 				Thread.sleep(THREAD_PAINT_SLEEP);
 			} catch (InterruptedException e) {
@@ -86,8 +85,8 @@ public class KTetrisController implements Runnable, KeyListener {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
 			LOG.info(" VK_UP ");
-//			currBlock.rotateBlock(board);
-			currBlock.upBlock(board);
+			currBlock.rotateBlock(board);
+//			currBlock.upBlock(board);
 			break;
 		case KeyEvent.VK_LEFT:
 			LOG.info(" VK_LEFT ");
@@ -190,23 +189,19 @@ public class KTetrisController implements Runnable, KeyListener {
 		return currBlock;
 	}
 
-	public List<KTetrisBlock> getNextBlocks() {
-		return waitBlockList;
-	}
-
 	public KTetrisBoard getBoard() {
 		return board;
 	}
 	
 	public void createNewBlock() {
-//		if (currBlock.posY <= 1)
-//			gameOver();
+		if (currBlock.posY <= 1)
+			gameOver();
+		
+		LOG.info(String.format("x:%d, y:%d %n", currBlock.posX, currBlock.posY));
+		
 		board.addBlock(currBlock);
 
 		this.currBlock = new KTetrisBlock(this);
-		
-//		currBlock = waitBlockList.remove(0);
-//		waitBlockList.add(new KTetrisBlock(this));
 	}
 	
 	
