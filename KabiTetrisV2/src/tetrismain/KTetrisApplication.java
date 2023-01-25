@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import controller.KTetrisController;
 import view.BoardView;
 import view.MainFrame;
+import view.MainMenuPopup;
 import view.StatusBar;
 
 
@@ -25,6 +26,7 @@ public class KTetrisApplication {
 		initLogger();		
 		
 		LOG.info("*** Start ***");
+//		new MainMenuPopup().setVisible(true);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -59,12 +61,7 @@ public class KTetrisApplication {
 		
 		JPanel tetrisView = new BoardView(controller);
 		frame.getContentPane().add(tetrisView);
-//		
-//		JPanel nextBlocksView = new NextBlockView(controller);
-//		frame.getContentPane().add(nextBlocksView);
-//		
-//		JPanel holdingBlockView = new HoldBlockView(controller);
-//		frame.getContentPane().add(holdingBlockView);
+		
 		LOG.info("*** Finish ***");
 	}
 	
